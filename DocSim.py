@@ -18,27 +18,22 @@ class DocSim:
                 # Ignore, if the word doesn't exist in the vocabulary
                 pass
 
-        # Assuming that document vector is the mean of all the word vectors
-        # PS: There are other & better ways to do it.
-        vector = np.mean(word_vecs, axis=0)
-        return vector
+        return np.mean(word_vecs, axis=0)
 
     def _cosine_sim(self, vecA, vecB):
         """Find the cosine similarity distance between two vectors."""
         csim = np.dot(vecA, vecB) / (np.linalg.norm(vecA) * np.linalg.norm(vecB))
-        if np.isnan(np.sum(csim)):
-            return 0
-        return csim
+        return 0 if np.isnan(np.sum(csim)) else csim
 
     def calculate_similarity(self, source_doc, target_docs=None,topn=None,threshold=0):
         """Calculates & returns similarity scores between given source document & all
         the target documents."""
         if not target_docs:
             return []
-        
+
         if not topn:
             topn = len(target_docs)
-        
+
         if isinstance(target_docs, str):
             target_docs = [target_docs]
 
@@ -53,4 +48,4 @@ class DocSim:
             # Sort results by score in desc order
             results.sort(key=lambda k: k["score"], reverse=True)
 
-        return results[0:topn]
+        return results[:topn]
